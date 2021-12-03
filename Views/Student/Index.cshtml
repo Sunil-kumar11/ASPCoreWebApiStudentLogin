@@ -1,0 +1,56 @@
+﻿@model IEnumerable<ASPCoreWebApiLogin.Student>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    @Html.ActionLink("Create", "Create", new { /* id=item.PrimaryKey */ }) |
+
+</p>
+<table class="table">
+    <thead>
+        <tr>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.StudentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roll_No)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Department)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Roll_No)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Department)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
