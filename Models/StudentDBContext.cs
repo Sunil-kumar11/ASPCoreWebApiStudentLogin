@@ -10,7 +10,8 @@ namespace ASPCoreWebApiLogin.Models
     {
         public StudentDBContext(DbContextOptions options) : base(options)
         { }
-        public DbSet<Department> Departments { get; set; }
+        public DbSet<Department> Departments { get; set; } 
+        public DbSet<Student> Students { get; set; }
 
     }
 }

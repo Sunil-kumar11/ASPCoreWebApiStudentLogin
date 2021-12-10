@@ -32,6 +32,7 @@ namespace ASPCoreWebApiLogin
 
            services.AddControllersWithViews();
             services.AddControllers();
+            
 
         }
 

@@ -11,8 +11,10 @@ namespace ASPCoreWebApiLogin.Models
     public class Department
     {
         [Key]
+        [Required]
         public int DptId { get; set; }
-
+        
+     
         public String  DepartmentName{ get; set; }
     }
 }

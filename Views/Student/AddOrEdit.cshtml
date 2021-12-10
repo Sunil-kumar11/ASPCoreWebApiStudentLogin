@@ -1,0 +1,74 @@
+﻿@model ASPCoreWebApiLogin.Student
+@{
+    ViewData["Title"] = "Create";
+    
+}
+
+<div class="container p-3 my-3 border">
+    <h1> @ViewBag.PageName</h1>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <hr />
+            @using (Html.BeginForm("AddOrEdit", "Student", FormMethod.Post))
+            {
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @if (@ViewBag.IsEdit)
+                {
+
+
+                    @Html.HiddenFor(m => m.SId)
+                }
+                <label for="StudentName" class="text-info"> StudentName</label>
+               
+                @Html.TextBoxFor(M => M.StudentName, new { @class = "form-control", @placeholder = "Student Name", @required = true, @id = "StudentName" })
+                <span asp-validation-for="StudentName" class="text-danger"></span>
+
+                <div class="form-group">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <label for="" class="text-info">Roll Number</label>
+                    @Html.EditorFor(model => model.Roll_No, new { htmlAttributes = new { @type = "number", @min = "0", @step = ""} })
+                    <span asp-validation-for="Roll_No" class="text-danger"></span>
+                </div>
+                <div class="form-group" style="width: 120px; background-color: rgba(0,0,255,.1)">
+
+                    <label asp-for="Department" class="control-label"></label>
+
+                    <div>
+                        <label for="Department" class="text-info">Department</label>
+                        @Html.DropDownListFor(m => m.ListOfDepartment, new SelectList(ViewBag.ListofDepartments, "Value", "Text"), "-----Select---- ")
+                        @*<select id="departmentList"
+                multiple="multiple"
+                required name="DepartmentName">
+            @foreach (var item in ViewBag.ListofDepartments)
+            {
+                <option value="@item.Value"> @item.Text </option>
+
+
+            }
+
+        </select>*@
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    Male
+                    @Html.RadioButtonFor(model => model.Gender, "Male")
+                    Female
+                    @Html.RadioButtonFor(model => model.Gender, "Female")
+                </div>
+                <div class="form-group">
+
+                    <input type="submit" name="submit" id="submitbtn" class="btn btn-info btn-md " value="submit" />
+                </div>
+            }
+            <div style="color:green;">@ViewBag.message</div>
+
+            <div>
+                <a class="btn btn-danger" asp-action="Index">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

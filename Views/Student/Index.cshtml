@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ASPCoreWebApiLogin.Student>
+﻿@model IEnumerable<ASPCoreWebApiLogin.ViewModels.StudentDisplayViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    @Html.ActionLink("Create", "Create", new { /* id=item.PrimaryKey */ }) |
+    @Html.ActionLink("Create", "AddOrEdit", new { /* id=item.PrimaryKey */ }) |
 
 </p>
 <table class="table">
@@ -24,7 +24,7 @@
                 @Html.DisplayNameFor(model => model.Gender)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Department)
+                @Html.DisplayNameFor(model => model.Department1)
             </th>
             <th></th>
         </tr>
@@ -43,12 +43,12 @@
                 @Html.DisplayFor(modelItem => item.Gender)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Department)
+                @Html.DisplayFor(modelItem => item.Department1)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("AddOrEdit", "AddOrEdit", new { id=item.SId}) 
+                
+                @Html.ActionLink("Delete", "Delete", new { id=item.SId })
             </td>
         </tr>
 }
