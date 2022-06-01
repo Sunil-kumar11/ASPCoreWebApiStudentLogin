@@ -5,11 +5,6 @@ VisualStudioVersion = 16.0.31129.286
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ASPCoreWebApiLogin", "ASPCoreWebApiLogin.csproj", "{0B790133-CEC6-438C-A115-F741BDB0C6FB}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Db", "Db", "{EE4C6819-CEE2-4598-B7C6-6454705452F0}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\..\..\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\College.bak = ..\..\..\..\..\..\Program Files\Microsoft SQL Server\MSSQL15.MSSQLSERVER\MSSQL\Backup\College.bak
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
