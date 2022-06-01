@@ -4,15 +4,90 @@
     
 }
 
+<head>
+    @*<script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>*@
+
+    @*<script>
+        function allvalidate()
+        {
+            var validated = true;
+            if (!validate()) validated = false;
+            if (!checkRollNo()) validated = false;
+            if (!checkDptmt(email)) validated = false;
+            if (validated)
+                $('[type="submit"]').submit();
+            return validated;
+        }
+
+
+        function validate()
+        {
+            var txtf = document.getElementById('StudentName');
+            if (txtf.value == 0 || txtf.value == null ||txtf.value.length > 50) {
+                document.getElementById('error').innerText = ('you must enter Student Name');
+                document.getElementById('error').style.color = 'red';
+
+                txtf.focus();
+                return false;
+            }
+            else {
+                document.getElementById('error').innerText = ('');
+                return true;
+            }
+        }
+
+
+        function checkRollNo()
+        {
+            var txtR = document.getElementById('Roll_No');
+
+            if (txtR.value == 0 || txtR.value > 9999) {
+                document.getElementById('errorRoollNO').innerText = ('Roll No must be from bellow 9999');
+                document.getElementById('errorRoollNO').style.color = 'red';
+                return false;
+            }
+            else {
+                document.getElementById('errorRoollNO').innerText = ('');
+                return true;
+            }
+
+        }
+
+
+        function checkDptmt() {
+            var dpt=document.getElementById("dpt");
+            if (dpt.value == 0) {
+                document.getElementById('errordpt').innerText = '';
+                return true;
+            }
+            else {
+                document.getElementById('errordpt').innerText = ('Please select Department ');
+                document.getElementById('errordpt').style.color = 'red';
+
+                return false;
+            }
+
+
+        }
+
+
+
+    </script>*@
+</head>
+
 <div class="container p-3 my-3 border">
     <h1> @ViewBag.PageName</h1>
 
     <div class="row">
         <div class="col-sm-6">
             <hr />
-            @using (Html.BeginForm("AddOrEdit", "Student", FormMethod.Post))
+            @using (Html.BeginForm("AddOrEdit", "Student", FormMethod.Post, new { Id = "formID" }))
             {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                 @if (@ViewBag.IsEdit)
                 {
 
@@ -20,15 +95,19 @@
                     @Html.HiddenFor(m => m.SId)
                 }
                 <label for="StudentName" class="text-info"> StudentName</label>
-               
+
                 @Html.TextBoxFor(M => M.StudentName, new { @class = "form-control", @placeholder = "Student Name", @required = true, @id = "StudentName" })
-                <span asp-validation-for="StudentName" class="text-danger"></span>
+                <span id="error"></span>
+                @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                @*<span asp-validation-for="StudentName" class="text-danger"></span>*@
 
                 <div class="form-group">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <label for="" class="text-info">Roll Number</label>
-                    @Html.EditorFor(model => model.Roll_No, new { htmlAttributes = new { @type = "number", @min = "0", @step = ""} })
-                    <span asp-validation-for="Roll_No" class="text-danger"></span>
+                    @Html.TextBoxFor(model => model.Roll_No, new { @class = "form-control", @placeholder = "Roll Number", @required = true, @id = "Roll_No" })
+                    <span id="errorRoollNO"></span>
+                    @Html.ValidationMessageFor(model => model.Roll_No, "", new { @class = "text-danger" })
+                    @*<span asp-validation-for="Roll_No" class="text-danger"></span>*@
                 </div>
                 <div class="form-group" style="width: 120px; background-color: rgba(0,0,255,.1)">
 
@@ -36,18 +115,19 @@
 
                     <div>
                         <label for="Department" class="text-info">Department</label>
-                        @Html.DropDownListFor(m => m.ListOfDepartment, new SelectList(ViewBag.ListofDepartments, "Value", "Text"), "-----Select---- ")
+                        @Html.DropDownListFor(m => m.ListOfDepartment, new SelectList(ViewBag.ListofDepartments, "Value", "Text"), "-----Select---- ", new { @id = "dpt", @required = true })
+                        <span id="errordpt"></span>
                         @*<select id="departmentList"
-                multiple="multiple"
-                required name="DepartmentName">
-            @foreach (var item in ViewBag.ListofDepartments)
-            {
-                <option value="@item.Value"> @item.Text </option>
+                            multiple="multiple"
+                            required name="DepartmentName">
+                        @foreach (var item in ViewBag.ListofDepartments)
+                        {
+                            <option value="@item.Value"> @item.Text </option>
 
 
-            }
+                        }
 
-        </select>*@
+                    </select>*@
                     </div>
                 </div>
                 <div class="col-md-10">
@@ -55,10 +135,12 @@
                     @Html.RadioButtonFor(model => model.Gender, "Male")
                     Female
                     @Html.RadioButtonFor(model => model.Gender, "Female")
+                    <span id="errorGender"></span>
+                    @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
                 </div>
                 <div class="form-group">
 
-                    <input type="submit" name="submit" id="submitbtn" class="btn btn-info btn-md " value="submit" />
+                    <input type="submit" name="submit" id="submitbtn" class="btn btn-info btn-md " value="submit" onclick="allvalidate();" />
                 </div>
             }
             <div style="color:green;">@ViewBag.message</div>
@@ -69,6 +151,17 @@
         </div>
     </div>
 </div>
-@section Scripts {
+@*@section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+<script type="text/javascript">
+    $(function () {
+        $('#formID').validate();
+
+        if ($('#formID').valid() === true) {
+            console.log("valid");
+        } else {
+            console.log("invalid");
+        }
+    });
+</script>
+}*@

@@ -80,6 +80,7 @@ namespace ASPCoreWebApiLogin.Models
                     student.DptId = Convert.ToInt32(rdr["DptId"]);
                 }
             //}
+            con.Close();
             return student;
         }
 

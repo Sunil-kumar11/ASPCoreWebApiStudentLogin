@@ -28,7 +28,7 @@ namespace ASPCoreWebApiLogin.Controllers
         {
             var query = (from t1 in _databaseContext.Students
                          join t2 in _databaseContext.Departments on t1.DptId equals t2.DptId
-                         select new { t1.StudentName, t1.Roll_No, t1.Gender, t2.DepartmentName }).ToList(); ;
+                         select new {t1.SId, t1.StudentName, t1.Roll_No, t1.Gender, t2.DepartmentName }).ToList(); ;
 
             foreach (var stud in query)
             {
@@ -38,6 +38,7 @@ namespace ASPCoreWebApiLogin.Controllers
                 student.Roll_No = stud.Roll_No;
                 student.Gender = stud.Gender;
                 student.Department1 = stud.DepartmentName;
+                student.SId = stud.SId;
                 lstStudent.Add(student);
             }
            
@@ -239,7 +240,7 @@ namespace ASPCoreWebApiLogin.Controllers
 
             ViewBag.ListofDepartments = DepartmentList;
 
-            ViewBag.PageName = Id == null ? "Create Student" : "Edit Student";
+            ViewBag.PageName = Id == null ||Id == 0 ? "Create Student" : "Edit Student";
             ViewBag.IsEdit = Id == null ? false : true;
             if (Id == null)
             {
@@ -264,52 +265,64 @@ namespace ASPCoreWebApiLogin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddOrEdit(Student studentData, IFormCollection form)
         {
+           
+
             string str = form["ListOfDepartment"].ToString();
-            studentData.DptId = Convert.ToInt32(str);
-            bool IsStudentExist = false;
-            int SId = studentData.SId;
-            var student1 = objStudent.GetStudentData(SId);
-            // Student student = await _databaseContext.Students.FindAsync(SId);
+                studentData.DptId = Convert.ToInt32(str);
+                bool IsStudentExist = false;
+                int SId = studentData.SId;
+                var student1 = objStudent.GetStudentData(SId);
+                // Student student = await _databaseContext.Students.FindAsync(SId);
 
-            if (student1 != null)
-            {
-                IsStudentExist = true;
-            }
-            else
-            {
-                student1= new Student();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (student1 != null)
                 {
-                    student1.StudentName = studentData.StudentName;
-                    student1.Roll_No = studentData.Roll_No;
-                    student1.Gender = studentData.Gender;
-                    student1.DptId = studentData.DptId;
-                    
-
-                    if (IsStudentExist)
-                    {
-                        //objStudent.AddStudent(student1);
-                        _databaseContext.Update(student1);
-                        ViewBag.message = "student details Updated successfully";
-                    }
-                    else
-                    {
-                        //objStudent.AddStudent(student1);
-                        _databaseContext.Add(student1);
-                        ViewBag.message = "student details added successfully";
-                    }
-                    await _databaseContext.SaveChangesAsync();
+                    IsStudentExist = true;
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    throw;
+                    student1 = new Student();
                 }
-                return RedirectToAction(nameof(Index));
-            }
+
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        student1.StudentName = studentData.StudentName;
+                        student1.Roll_No = studentData.Roll_No;
+                        student1.Gender = studentData.Gender;
+                        student1.DptId = studentData.DptId;
+
+
+                        if (IsStudentExist)
+                        {
+                            //objStudent.AddStudent(student1);
+                            _databaseContext.Update(student1);
+                            ViewBag.message = "student details Updated successfully";
+                        }
+                        else
+                        {
+                            //objStudent.AddStudent(student1);
+                            _databaseContext.Add(student1);
+                            ViewBag.message = "student details added successfully";
+                        }
+                        await _databaseContext.SaveChangesAsync();
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        throw;
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+            var DepartmentList = (from Department in _databaseContext.Departments
+                                  select new SelectListItem()
+                                  {
+                                      Text = Department.DepartmentName,
+                                      Value = Department.DptId.ToString()
+                                  }).ToList();
+
+            ViewBag.ListofDepartments = DepartmentList;
+            ViewBag.PageName = SId == null || SId == 0 ? "Create Student" : "Edit Student";
+            ViewBag.IsEdit = SId == null ? false : true;
             return View();
         }
 
